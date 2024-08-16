@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video with IP Address Box</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the video covers the container */
+            display: block; /* Remove any unwanted space below the video */
+            pointer-events: none; /* Prevent interactions with the video itself */
+        }
+        .container {
+            background-color: rgba(240, 240, 240, 0.8); /* Semi-transparent background */
+            border-radius: 15px;
+            padding: 20px; /* Add padding for the new element */
+            width: calc(100% - 40px); /* Adjust for padding */
+            max-width: 1200px; /* Optional max-width */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            padding-right: 120px; /* Make space for the status message */
+        }
+        #ip-address {
+            font-size: calc(1rem + 1vw); /* Scales text size based on viewport width */
+            text-align: center;
+            margin: 0;
+        }
+        .status-message {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1rem;
+            color: green;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .dots {
+            display: inline-block;
+            margin-left: 0.5em;
+            font-size: 1.2rem; /* Adjust size if needed */
+        }
+        .dots:after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+        @keyframes dots {
+            0% { content: '...'; }
+            25% { content: '..'; }
+            50% { content: '.'; }
+            75% { content: '..'; }
+            100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="video" preload="metadata">
+            <source src="https://evilmadmax.github.io/ricky/rickroll.mp4" type="video/mp4">
+            Sorry, your browser doesn't support embedded videos.
+        </video>
+        <div class="container">
+            <p id="ip-address">Loading...</p>
+            <div class="status-message">
+                Sending to DataBase<span class="dots"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch and display the IP address
+        async function getIPAddress() {
+            try {
+                // Use a public API to get the user's IP address
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                document.getElementById('ip-address').textContent = "Ooõ Yoink! " + data.ip;
+            } catch (error) {
+                document.getElementById('ip-address').textContent = 'Ooõ Yoink! Unable to retrieve IP address.';
+            }
+        }
+
+        // Function to handle mouse movement
+        function handleMouseMove() {
+            const video = document.getElementById('video');
+            if (video.paused) {
+                video.play();
+            }
+        }
+
+        // Call the function when the page loads
+        getIPAddress();
+
+        // Add mousemove event listener to the document
+        document.addEventListener('mousemove', handleMouseMove);
+    </script>
+</body>
+</html>
